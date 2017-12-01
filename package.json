@@ -1,0 +1,13 @@
+{
+  "name": "code-advent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:1wheel/code-advent.git",
+  "author": "Adam Pearce <1wheel@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^4.12.0",
+    "indian-ocean": "^3.0.2",
+    "underscore": "^1.8.3"
+  }
+}
