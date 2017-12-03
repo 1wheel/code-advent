@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "d3": "^4.12.0",
+    "d3-jetpack": "^2.0.15",
     "indian-ocean": "^3.0.2",
     "underscore": "^1.8.3"
   }
