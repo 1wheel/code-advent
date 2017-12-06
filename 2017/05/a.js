@@ -15,7 +15,7 @@ var steps = 0
 
 while (0 <= i < lines.length){
   var v = lines[i]
-  console.log(i, v, lines)
+  console.log(i, v, lines, )
 
   if (isNaN(v)) throw steps
 
