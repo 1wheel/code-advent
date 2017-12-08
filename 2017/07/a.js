@@ -23,17 +23,17 @@ var plates = lines.map(d => {
   return {name, above, below, dWeight}
 })
 
-name2plate = _.indexBy(plates, d => d.name)
+var name2plate = _.indexBy(plates, d => d.name)
 
 
 // console.log(name2plate)
-  plates.forEach(p => {
-    p.above.forEach(d => {
-      name2plate[d].below = p
-    })
-
-    p.above = p.above.map(d => name2plate[d])
+plates.forEach(p => {
+  p.above.forEach(d => {
+    name2plate[d].below = p
   })
+
+  p.above = p.above.map(d => name2plate[d])
+})
 
 var i = 0
 while (i < 20){
