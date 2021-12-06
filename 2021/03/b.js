@@ -30,20 +30,25 @@ function incC(index){
   var common = d3.median(vs)
   if (common == .5) common = 0
 
+  console.log({common: +!common, index})
+
   if (c.length == 1) return
-  c = c.filter(d => d[index] == !common)
+  c = c.filter(d => d[index] == +!common)
+
+  console.log(c.slice(0, 3).map(d => d.join('')))
 } 
 
 d3.range(n).forEach(incO)
 d3.range(n).forEach(incC)
+console.log(c)
 
 oNum = bin2num(o[0])
 cNum = bin2num(c[0])
 
+
 console.log(cNum*oNum)
 
 function bin2num(bin){
-  return d3.sum(bin.reverse(), (d, i) => d*Math.pow(2, i))
+  return d3.sum(bin.slice().reverse(), (d, i) => d*Math.pow(2, i))
 }
-
-
+console.log({oNum, cNum})

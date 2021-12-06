@@ -44,6 +44,7 @@ function incCount(x, y){
   grid[key]++
 }
 
+
 // console.log(grid)
 
 var count = d3.sum(d3.values(grid), d => d > 1)
