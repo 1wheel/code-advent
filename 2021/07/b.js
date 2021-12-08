@@ -22,13 +22,16 @@ var targets = d3.range(d3.min(c), d3.max(c) + 1)
 
 
 var cuml = d3.range(2000).map(d => d3.sum(d3.range(d + 1)))
-
-// console.log(cuml.map((d, i) => ([i, d])).join('\n'))
-// console.log(cuml[])
 var difs = targets.map(a => {
   return d3.sum(c, b => cuml[Math.abs(a - b)])
 })
+
 console.log(d3.min(difs))
 
 
 function log(...args){ console.log.apply(null, args) }
+
+d3.range(2000) |>
+  a => d3.sum(crabs, b => (a - b)*(a - b + 1)/2) |>
+  d3.min |>
+  log
