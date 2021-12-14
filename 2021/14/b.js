@@ -7,71 +7,100 @@ function log(...args){ console.log.apply(null, args) }
 
 var str = fs.readFileSync('test.txt', 'utf8')
 var str = fs.readFileSync('actual.txt', 'utf8')
+
 var lines = str.split('\n')
 
+letters = _.uniq(str.split(' '))
 
-var points = []
-var folds = []
-
-var isFolds = false
+var rules = []
+var isRule = false
+var str = null
 
 lines.forEach(d => {
-  if (isFolds){
-    [dir, foldV] = d.replace('fold along ', '').split('=')
-    folds.push({dir, foldV})
-  } else if (d){
-    points.push(d.split(',').map(d => +d))
-  }
+  if (!d) return
 
-  if (!d) isFolds = true
+  if (!str){
+    str = d
+  } else{
+    rules.push(d.split(' -> '))
+  }
 })
 
-log(points)
-log(folds)
 
-function addFold({dir, foldV}){
-  op = points
-  points = []
+letters = str
+rules.forEach(d => {
+  letters = letters + rules.join('').replaceAll(',', '')
+})
 
-  var maxX = d3.max(op, d => d[0])
-  var maxY = d3.max(op, d => d[1])
+letters = _.uniq(letters)
+letters.push('z')
 
-  if (dir == 'x'){
-    op.forEach(([x, y]) => {
-      var dif = x - foldV
-      if (dif > 0) x = x - dif*2
-      points.push([x, y])
+var pairs = d3.cross(letters, letters)
+pairObj = {}
+pairs.forEach(d => {
+  var str = d.join('')
+  array = []
+
+  pairObj[str] = array
+
+  out = manualStep(d)
+  pairObj[str] = {update: out, count: 0}
+})
+
+
+log(pairObj)
+
+function manualStep(str){
+  ns = []
+  str.forEach((d, i) => {
+    var p = str[i + 1] || ''
+
+    ns.push(d)
+
+    rules.forEach(r => {
+      if (r[0] == d + p){
+        ns.push(r[1])
+      }
     })
-  } else {
-    op.forEach(([x, y]) => {
-      var dif = y - foldV
-      orgY = y
-      if (dif > 0) y = y - dif*2
-      log({x, y, orgY})
-      points.push([x, y])
-    })
-  }
+  })
+
+  str = ns
+
+  return str
 }
 
-addFold(folds[0])
 
-log(_.uniq(points.map(d => d.join(','))).length)
-
-pts = _.uniq(points.map(d => d.join(',')))
-
-yv = jp.nestBy(pts, d => d.split(',')[1])
-log(yv.filter(d => d.key == 0))
-
-folds.forEach(addFold)
-
-pts = _.uniq(points.map(d => d.join(',')))
-  .map(d => d.split(','))
-yv = jp.nestBy(pts,d => d[1])
-
-_.sortBy(yv, d=>+d.key).forEach(line => {
-  max = d3.max(line, d=> d[0])
-  outpt = d3.range(0, max + 1).map(d => ' ')
-  line.forEach(d => outpt[d[0]] = 'X')
-
-  log(outpt.join(''))
+str.split('').forEach((d, i) => {
+  var p = str[i + 1] || 'z'
+  pairObj[d + p].count++
 })
+
+log(pairObj)
+
+function step(){
+  var nObj = JSON.parse(JSON.stringify(pairObj))
+
+  d3.entries(pairObj).forEach(({key, value}) => {
+    var {update, count} = value
+
+    if (update.length == 3){
+      var [a, b, c] = update
+      nObj[key].count -= count
+      nObj[a + b].count += count
+      nObj[b + c].count += count
+    }
+  })
+
+  pairObj = nObj
+}
+
+d3.range(40).forEach(step)
+pairs = d3.entries(pairObj)
+
+byc = jp.nestBy(pairs, d => d.key[0]).map(d => d3.sum(d, d => d.value.count))
+
+byc = _.sortBy(byc)
+
+log(byc[1] - _.last(byc))
+
+log(byc[0])
