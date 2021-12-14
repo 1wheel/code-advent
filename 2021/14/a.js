@@ -63,15 +63,3 @@ yv = jp.nestBy(pts, d => d.split(',')[1])
 log(yv.filter(d => d.key == 0))
 
 folds.forEach(addFold)
-
-pts = _.uniq(points.map(d => d.join(',')))
-  .map(d => d.split(','))
-yv = jp.nestBy(pts,d => d[1])
-
-_.sortBy(yv, d=>+d.key).forEach(line => {
-  max = d3.max(line, d=> d[0])
-  outpt = d3.range(0, max + 1).map(d => ' ')
-  line.forEach(d => outpt[d[0]] = 'X')
-
-  log(outpt.join(''))
-})
