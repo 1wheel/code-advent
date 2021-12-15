@@ -9,6 +9,7 @@
     "d3": "^4.12.0",
     "d3-jetpack": "^2.0.15",
     "indian-ocean": "^3.0.2",
+    "pathfinding": "^0.4.18",
     "underscore": "^1.8.3"
   }
 }
