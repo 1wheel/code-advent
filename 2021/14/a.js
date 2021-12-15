@@ -10,8 +10,6 @@ var str = fs.readFileSync('actual.txt', 'utf8')
 
 var lines = str.split('\n')
 
-letters = _.uniq(str.split(' '))
-
 
 var rules = []
 var isRule = false
@@ -29,8 +27,7 @@ lines.forEach(d => {
 
 str = str.split('')
 
-function step(i){
-  log(i)
+function step(){
   ns = []
   str.forEach((d, i) => {
     var p = str[i + 1] || ''
@@ -47,7 +44,7 @@ function step(i){
   str = ns
 }
 
-d3.range(40).forEach(step)
+d3.range(10).forEach(step)
 
 
 
